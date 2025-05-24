@@ -1,0 +1,19 @@
+pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version "$springBootVersion"
+        id 'io.spring.dependency-management' version "$springDependenciesVersion"
+
+        id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
+
+        id 'org.openapi.generator' version '7.8.0'
+    }
+}
+
+plugins {
+    // Apply the foojay-resolver plugin to allow automatic download of JDKs
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = 'ProductService'
+
+include('domain', 'infrastructure')
