@@ -75,8 +75,7 @@ sourceSets {
     main.java.srcDirs += layout.buildDirectory.dir("generated/openapi/server/src/main/java")
 }
 
-def basePackage = 'com.ahold.rbp.enablement.generated.web'
-def clientBasePackage = 'com.ahold.rbp.enablement.generated.clients.github'
+def basePackage = 'com.digitalscenery.commerce.generated.web'
 def gradleVersion = "${gradle.gradleVersion}"
 
 tasks.register('generateServiceCatalogApi', GenerateTask) {
@@ -112,28 +111,6 @@ tasks.register('generateServiceCatalogApi', GenerateTask) {
     }
 }
 
-tasks.register('generateGitHubApi', GenerateTask) {
-    generatorName = 'spring'
-    library = 'spring-cloud'
-    inputSpec = "$projectDir/src/main/resources/openapi/client/github-search-api.yaml"
-    outputDir = "${layout.buildDirectory.get().asFile}/generated/openapi/client"
-    packageName = clientBasePackage
-    apiPackage = "${clientBasePackage}.api"
-    modelPackage = "${clientBasePackage}.model"
-    invokerPackage = "${clientBasePackage}.invoker"
-    enablePostProcessFile = true
-    skipOverwrite = false
-    configOptions.set([
-            interfaceOnly          : 'true',
-            generateApis           : 'true',
-            generateSupportingFiles: 'false',
-            useSpringBoot3         : 'true',
-            enumPropertyNaming     : "original",
-            serializationLibrary   : 'jackson',
-            dateLibrary            : 'java8'
-    ])
-}
-
-compileJava.dependsOn 'generateServiceCatalogApi', 'generateGitHubApi'
+compileJava.dependsOn 'generateServiceCatalogApi'
 
 
