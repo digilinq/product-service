@@ -1,0 +1,194 @@
+openapi: 3.0.3
+info:
+  title: Product Service Api
+  description: Product Service Api
+  version: 1.0.4
+servers:
+  - url: 'https'
+paths:
+  /products/{id}:
+    get:
+      summary: Represent a product
+      description: >
+        This resource represents an individual product in the system.
+        Each product is identified by a unique identifier `id`.
+      operationId: findProductById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    delete:
+      summary: Delete a product by ID
+      description: >
+        Deletes the product with the specified ID.
+      operationId: remove
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the product to delete.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Product deleted successfully.
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad request. Please check your request parameters.
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized. Please authenticate to perform this action.
+        '403':
+          description: Forbidden.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden. You don't have permission to delete this product.
+        '404':
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product with ID {id} not found.
+  /products:
+    get:
+      summary: Get a list of products
+      description: >
+        Find products based on given parameters
+        If no product find, empty list will be returned
+      operationId: findProducts
+      parameters:
+        - in: query
+          name: productName
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Products populated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: New product will be created
+      description: >
+        This resource will create and add new product.
+        Product id will be generated after successful operation
+      operationId: saveProduct
+      requestBody:
+        description: Product specification
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        201:
+          description: Product added successfully
+components:
+  schemas:
+    #    Locale:
+    #      type: object
+    Product:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 3
+          maxLength: 100
+        description:
+          type: string
+          minLength: 3
+          maxLength: 100
+    TemplatedMail:
+      type: object
+      required:
+        - destination
+        - template
+        - locale
+        - data
+        - proposition
+      properties:
+        destination:
+          type: array
+          items:
+            type: string
+            example: email@example.org
+        subject:
+          type: string
+          example: Subject
+        content:
+          type: string
+          example: Content of the email
+        template:
+          type: string
+          example: template
+        #        locale:
+        #          $ref: '#/components/schemas/Locale'
+        data:
+          $ref: '#/components/schemas/MapEntry'
+        proposition:
+          type: string
+        userEmails:
+          type: array
+          items:
+            type: string
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+    MapEntry:
+      type: object
+      additionalProperties:
+        type: object
+    Attachment:
+      type: object
+      properties:
+        filename:
+          type: string
+        nestedFilenames:
+          type: array
+          items:
+            type: string

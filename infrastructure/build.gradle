@@ -1,0 +1,116 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version "$springDependenciesVersion"
+
+    id 'org.openapi.generator'
+}
+
+configurations {
+    compileJava {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // Open API Generator
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.20'
+    implementation 'io.swagger.core.v3:swagger-models:2.2.20'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
+
+    // Mapstruct
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    // If you are using mapstruct in test code
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+//    compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+
+    // Swagger UI
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+
+    constraints {
+        // Define dependency versions as constraints
+        implementation 'org.apache.commons:commons-text:1.12.0'
+    }
+
+//    testImplementation platform("org.junit:junit-bom:$junitJupiterVersion")
+//    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // Kotlin standard library (for tests)
+    testImplementation 'org.jetbrains.kotlin:kotlin-stdlib'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+
+    // Spring Boot Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation project(':domain')
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    main.java.srcDirs += layout.buildDirectory.dir("generated/openapi/client/src/main/java")
+    main.java.srcDirs += layout.buildDirectory.dir("generated/openapi/server/src/main/java")
+}
+
+def basePackage = 'com.digitalscenery.commerce.generated.web'
+def gradleVersion = "${gradle.gradleVersion}"
+
+tasks.register('generateServiceCatalogApi', GenerateTask) {
+    generatorName = 'spring'
+    library = 'spring-boot'
+    inputSpec = "$projectDir/src/main/resources/openapi/server/product-oas.yaml"
+    outputDir = "${layout.buildDirectory.get().asFile}/generated/openapi/server"
+    packageName = basePackage
+    apiPackage = "${basePackage}.api"
+    modelPackage = "${basePackage}.model"
+    invokerPackage = "${basePackage}.invoker"
+//    modelNameSuffix = "Dto"
+    enablePostProcessFile = true
+    skipOverwrite = false
+    configOptions.set([
+            interfaceOnly       : 'true',
+            useSpringBoot3      : 'true',
+            enumPropertyNaming  : "original",
+            serializationLibrary: 'jackson',
+            dateLibrary         : 'java8'
+    ])
+    importMappings.set([
+            Locale: "java.util.Locale",
+    ])
+
+    buildEnvironment {
+        'org.yaml.snakeyaml.max-code-points=100000'
+    }
+
+    doFirst {
+        println "Generating OpenAPI client for Service Catalog API..."
+        println("${System.getenv("JAVA_HOME")}/bin/java -jar")
+    }
+}
+
+compileJava.dependsOn 'generateServiceCatalogApi'
+
+
