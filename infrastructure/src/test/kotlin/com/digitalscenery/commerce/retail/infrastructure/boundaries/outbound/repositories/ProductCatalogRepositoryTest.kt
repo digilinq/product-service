@@ -1,5 +1,7 @@
 package com.digitalscenery.commerce.retail.infrastructure.boundaries.outbound.repositories
 
+import com.digitalscenery.commerce.retail.infrastructure.boundaries.outbound.repositories.entities.ProductCatalogEntity
+import jakarta.persistence.EntityManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ActiveProfiles
@@ -10,6 +12,7 @@ import kotlin.test.assertNotNull
 @ActiveProfiles("test")
 class ProductCatalogRepositoryTest @Autowired constructor(
     private val productCatalogRepository: ProductCatalogRepository,
+    private val em: EntityManager
 ) {
 
     @Test
@@ -17,4 +20,15 @@ class ProductCatalogRepositoryTest @Autowired constructor(
         assertNotNull(productCatalogRepository)
     }
 
+    @Test
+    fun `save product entity`() {
+        val product = ProductCatalogEntity()
+        product.id = 1L
+        product.name = "Test Product"
+        product.description = "This is a test product."
+        productCatalogRepository.save(product)
+
+        val savedProduct = em.find(ProductCatalogEntity::class.java, 1L)
+        println(savedProduct)
+    }
 }
