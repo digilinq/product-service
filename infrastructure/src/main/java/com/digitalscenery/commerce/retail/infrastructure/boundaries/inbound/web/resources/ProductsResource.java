@@ -2,7 +2,9 @@ package com.digitalscenery.commerce.retail.infrastructure.boundaries.inbound.web
 
 import com.digitalscenery.commerce.generated.web.api.ProductsApi;
 import com.digitalscenery.commerce.generated.web.model.Product;
+import com.digitalscenery.commerce.retail.domain.product.ProductCatalog;
 import com.digitalscenery.commerce.retail.domain.product.port.api.ProductCatalogService;
+import com.digitalscenery.commerce.retail.infrastructure.boundaries.inbound.web.mappers.ProductMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,14 +17,17 @@ import java.util.UUID;
 public class ProductsResource implements ProductsApi {
 
     private final ProductCatalogService productCatalogService;
+    private final ProductMapper productMapper;
 
-    public ProductsResource(ProductCatalogService productCatalogService) {
+    public ProductsResource(ProductCatalogService productCatalogService, ProductMapper productMapper) {
         this.productCatalogService = productCatalogService;
+        this.productMapper = productMapper;
     }
-
 
     @Override
     public ResponseEntity<Product> findProductById(UUID id) {
+        ProductCatalog product = productCatalogService.findProductById(id);
+
         return ProductsApi.super.findProductById(id);
     }
 

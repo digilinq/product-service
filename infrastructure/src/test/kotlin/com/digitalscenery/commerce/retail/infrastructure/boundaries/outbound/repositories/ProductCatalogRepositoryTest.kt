@@ -18,17 +18,16 @@ class ProductCatalogRepositoryTest @Autowired constructor(
     @Test
     fun `should work`() {
         assertNotNull(productCatalogRepository)
+        assertNotNull(em)
     }
 
     @Test
-    fun `save product entity`() {
+    fun `id should be generated while save product`() {
         val product = ProductCatalogEntity()
-        product.id = 1L
         product.name = "Test Product"
         product.description = "This is a test product."
-        productCatalogRepository.save(product)
 
-        val savedProduct = em.find(ProductCatalogEntity::class.java, 1L)
-        println(savedProduct)
+        val savedProduct = productCatalogRepository.save(product)
+        assertNotNull(savedProduct.id)
     }
 }

@@ -12,14 +12,20 @@ dependencies {
 
     // Kotlin standard library (for tests)
     testImplementation 'org.jetbrains.kotlin:kotlin-stdlib'
-    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
 
-    testImplementation platform("org.junit:junit-bom:$junitJupiterVersion")
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    // MockK for mocking in tests
+    testImplementation "io.mockk:mockk:${mockkVersion}"
+
+    // This will bring junit-platform-engine
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
-    // Use JUnit Platform for unit tests.
+test {
     useJUnitPlatform()
+    testLogging {
+        exceptionFormat "full"
+        events "started", "skipped", "passed", "failed"
+        showStandardStreams true
+    }
 }
