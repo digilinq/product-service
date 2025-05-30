@@ -2,7 +2,6 @@ package com.digitalscenery.commerce.retail.infrastructure.boundaries.outbound.ad
 
 import com.digitalscenery.commerce.retail.domain.product.ProductCatalog;
 import com.digitalscenery.commerce.retail.infrastructure.boundaries.outbound.repositories.entities.ProductCatalogEntity;
-import org.jetbrains.annotations.NotNull;
 import org.mapstruct.Mapper;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
@@ -10,5 +9,5 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 @Mapper(componentModel = SPRING)
 public interface ProductCatalogEntityMapper {
 
-    ProductCatalog map(@NotNull ProductCatalogEntity productCatalogEntity);
+    ProductCatalog map(ProductCatalogEntity productCatalogEntity);
 }

@@ -16,15 +16,9 @@ class ProductCatalogServiceImplTest {
     private lateinit var productCatalogService: ProductCatalogService
     private val productCatalogRepositoryPort: ProductCatalogRepositoryPort = mockk()
 
-
     @BeforeTest
     fun setUp() {
         productCatalogService = ProductCatalogServiceImpl(productCatalogRepositoryPort)
-    }
-
-    @Test
-    fun `should fail`() {
-        kotlin.test.fail()
     }
 
     @Test
