@@ -27,10 +27,9 @@ class ProductCatalogServiceImplTest {
         val id: UUID = UUID.randomUUID()
         every { productCatalogRepositoryPort.findProductById(id) } returns Optional.empty()
 
-        // expect IllegalArgumentException
         assertFailsWith<ProductNotFoundException> {
             productCatalogService.findProductById(id)
         }
-        verify(exactly = 1) { productCatalogRepositoryPort.findProductById(id) }
+        verify { productCatalogRepositoryPort.findProductById(id) }
     }
 }

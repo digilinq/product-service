@@ -11,4 +11,5 @@ public interface ProductMapper {
 
     ProductCatalog map(Product product);
 
+    Product map(ProductCatalog productCatalog);
 }

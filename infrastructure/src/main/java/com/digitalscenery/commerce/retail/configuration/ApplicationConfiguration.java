@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfiguration {
 
     @Bean
-    public ProductCatalogService  productCatalogService(ProductCatalogRepositoryPort productCatalogRepositoryPort) {
+    public ProductCatalogService productCatalogService(ProductCatalogRepositoryPort productCatalogRepositoryPort) {
         return new ProductCatalogServiceImpl(productCatalogRepositoryPort);
     }
 }

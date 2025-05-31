@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.UUID;
 
+import static com.digitalscenery.commerce.retail.infrastructure.boundaries.inbound.web.configuration.WebConfig.API_BASE_PATH;
+
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(API_BASE_PATH)
 public class ProductsResource implements ProductsApi {
 
     private final ProductCatalogService productCatalogService;
@@ -26,9 +28,8 @@ public class ProductsResource implements ProductsApi {
 
     @Override
     public ResponseEntity<Product> findProductById(UUID id) {
-        ProductCatalog product = productCatalogService.findProductById(id);
-
-        return ProductsApi.super.findProductById(id);
+        Product product = productMapper.map(productCatalogService.findProductById(id));
+        return ResponseEntity.ok(product);
     }
 
     @Override

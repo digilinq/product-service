@@ -30,4 +30,12 @@ class ProductCatalogRepositoryTest @Autowired constructor(
         val savedProduct = productCatalogRepository.save(product)
         assertNotNull(savedProduct.id)
     }
+
+    @Test
+    fun `list all table names`() {
+        em.metamodel?.entities?.forEach { e ->
+            println(e)
+            println("Entity Name: ${e?.name}, Table Name: ${e?.name}")
+        }
+    }
 }
