@@ -5,6 +5,7 @@ import com.digitalscenery.commerce.retail.domain.product.ProductNotFoundExceptio
 import com.digitalscenery.commerce.retail.domain.product.port.api.ProductCatalogService;
 import com.digitalscenery.commerce.retail.domain.product.port.spi.ProductCatalogRepositoryPort;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ProductCatalogServiceImpl implements ProductCatalogService {
@@ -17,11 +18,6 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 
     @Override
     public ProductCatalog addProduct(ProductCatalog product) {
-        return null;
-    }
-
-    @Override
-    public ProductCatalog getProduct(String id) {
         return null;
     }
 
@@ -39,5 +35,10 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     public ProductCatalog findProductById(UUID id) {
         return productCatalogRepositoryPort.findProductById(id).orElseThrow(
                 () -> new ProductNotFoundException("Product not found with id: " + id));
+    }
+
+    @Override
+    public List<ProductCatalog> findProducts(String name) {
+        return productCatalogRepositoryPort.findAllProducts();
     }
 }

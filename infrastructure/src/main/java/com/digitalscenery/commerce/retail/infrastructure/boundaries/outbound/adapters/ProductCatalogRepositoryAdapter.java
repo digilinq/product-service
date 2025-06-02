@@ -6,8 +6,11 @@ import com.digitalscenery.commerce.retail.infrastructure.boundaries.outbound.ada
 import com.digitalscenery.commerce.retail.infrastructure.boundaries.outbound.repositories.ProductCatalogRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProductCatalogRepositoryAdapter implements ProductCatalogRepositoryPort {
@@ -20,9 +23,16 @@ public class ProductCatalogRepositoryAdapter implements ProductCatalogRepository
         this.mapper = mapper;
     }
 
-
     @Override
     public Optional<ProductCatalog> findProductById(UUID id) {
         return repository.findById(id).map(mapper::map);
+    }
+
+    @Override
+    public List<ProductCatalog> findAllProducts() {
+        return Stream.of(repository.findAll())
+                .flatMap(List::stream)
+                .map(mapper::map)
+                .collect(Collectors.toList());
     }
 }

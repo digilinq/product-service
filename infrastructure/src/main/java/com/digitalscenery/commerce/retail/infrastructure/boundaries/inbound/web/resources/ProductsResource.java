@@ -2,9 +2,9 @@ package com.digitalscenery.commerce.retail.infrastructure.boundaries.inbound.web
 
 import com.digitalscenery.commerce.generated.web.api.ProductsApi;
 import com.digitalscenery.commerce.generated.web.model.Product;
-import com.digitalscenery.commerce.retail.domain.product.ProductCatalog;
 import com.digitalscenery.commerce.retail.domain.product.port.api.ProductCatalogService;
 import com.digitalscenery.commerce.retail.infrastructure.boundaries.inbound.web.mappers.ProductMapper;
+import com.eightbits.shared.stdlib.streams.With;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +28,20 @@ public class ProductsResource implements ProductsApi {
 
     @Override
     public ResponseEntity<Product> findProductById(UUID id) {
-        Product product = productMapper.map(productCatalogService.findProductById(id));
-        return ResponseEntity.ok(product);
+        With<ResponseEntity<Product>> response = With.value(id)
+                .perform(productCatalogService::findProductById)
+                .map(productMapper::map)
+                .map(ResponseEntity::ok);
+
+        return response.get();
     }
 
     @Override
     public ResponseEntity<List<Product>> findProducts(String productName) {
-        return ProductsApi.super.findProducts(productName);
+        var response = With.value(productName).map(productCatalogService::findProducts).map(productMapper::map)
+                .map(ResponseEntity::ok);
+
+        return response.get();
     }
 
     @Override
