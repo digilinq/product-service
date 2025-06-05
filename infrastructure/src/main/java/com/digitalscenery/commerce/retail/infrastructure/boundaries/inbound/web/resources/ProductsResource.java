@@ -28,20 +28,18 @@ public class ProductsResource implements ProductsApi {
 
     @Override
     public ResponseEntity<Product> findProductById(UUID id) {
-        With<ResponseEntity<Product>> response = With.value(id)
-                .perform(productCatalogService::findProductById)
+        return With.value(id)
+                .map(productCatalogService::findProductById)
                 .map(productMapper::map)
-                .map(ResponseEntity::ok);
-
-        return response.get();
+                .transform(ResponseEntity::ok);
     }
 
     @Override
     public ResponseEntity<List<Product>> findProducts(String productName) {
-        var response = With.value(productName).map(productCatalogService::findProducts).map(productMapper::map)
-                .map(ResponseEntity::ok);
-
-        return response.get();
+        return With.value(productName)
+                .map(productCatalogService::findProducts)
+                .map(productMapper::map)
+                .transform(ResponseEntity::ok);
     }
 
     @Override
