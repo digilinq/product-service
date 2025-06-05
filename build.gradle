@@ -1,3 +1,7 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
+
 subprojects {
     group = 'com.digitalscenery.commerce.retail'
     version = '0.0.1-SNAPSHOT'
@@ -6,6 +10,18 @@ subprojects {
 
     repositories {
         mavenCentral()
+        mavenLocal()
+        maven {
+            url = uri("https://maven.pkg.github.com/digilinq/product-service")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+                password = project.findProperty("gpr.key") ?: System.getenv("GPR_TOKEN")
+            }
+        }
+    }
+
+    dependencies {
+        implementation 'com.eightbits.shared:stdlib:1.0.4-SNAPSHOT'
     }
 
     java {

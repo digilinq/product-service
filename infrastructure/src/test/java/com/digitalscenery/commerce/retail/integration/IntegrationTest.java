@@ -22,7 +22,7 @@ public @interface IntegrationTest {
     SpringBootTest.WebEnvironment webEnvironment() default SpringBootTest.WebEnvironment.RANDOM_PORT;
 
     @AliasFor(annotation = ActiveProfiles.class, attribute = "profiles")
-    String[] activeProfiles() default {"local"};
+    String[] activeProfiles() default {"test"};
 
     @AliasFor(annotation = SpringBootTest.class, attribute = "properties")
     String[] properties() default {};
