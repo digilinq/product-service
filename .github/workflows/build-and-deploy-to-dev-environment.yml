@@ -5,6 +5,10 @@ on:
     types: [ opened, synchronize, reopened ]
     branches: [ main, master ]
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   build:
     name: Build gradle project
