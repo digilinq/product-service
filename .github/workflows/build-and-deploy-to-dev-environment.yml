@@ -9,6 +9,8 @@ jobs:
   build:
     name: Build gradle project
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       jar_file_name: ${{ steps.get-jar-name.outputs.jar_file_name }}
     steps:
