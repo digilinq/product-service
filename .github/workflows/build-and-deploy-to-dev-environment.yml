@@ -2,6 +2,7 @@ name: Build and Deploy to Dev Environment
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
     branches: [ main, master ]
 
 jobs:
@@ -10,5 +11,3 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-
