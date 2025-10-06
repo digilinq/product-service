@@ -30,3 +30,19 @@ subprojects {
         }
     }
 }
+
+tasks.register('printAllEnv') {
+    doLast {
+        System.getenv().each { key, value ->
+            println "$key=$value"
+        }
+    }
+}
+
+tasks.register('printAllProjectProperties') {
+    doLast {
+        project.properties.each { key, value ->
+            println "$key=$value"
+        }
+    }
+}
