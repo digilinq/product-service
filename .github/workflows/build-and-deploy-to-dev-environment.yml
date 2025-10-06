@@ -35,6 +35,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Print Environment Variables
+        run: |
+          ./gradlew printAllEnv
+          ./gradlew printAllProjectProperties
+
       - name: Assemble the project
         run: ./gradlew assemble
 
