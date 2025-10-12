@@ -127,4 +127,8 @@ tasks.register('generateServiceCatalogApi', GenerateTask) {
 
 compileJava.dependsOn 'generateServiceCatalogApi'
 
-
+tasks.register('printBootJarName') {
+    doLast {
+        println tasks.bootJar.archiveFile.get().asFile.name
+    }
+}
