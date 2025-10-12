@@ -45,10 +45,8 @@ jobs:
         run: ./gradlew test
 
       - name: Run build in a subdirectory
-        working-directory: another-build
+        working-directory: build
         run: ./gradlew build
-
-      - run: ls -la
 
 #      - name: Build with Gradle
 #        run: ./gradlew build --no-daemon
