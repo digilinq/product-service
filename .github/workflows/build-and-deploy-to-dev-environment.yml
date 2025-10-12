@@ -44,11 +44,9 @@ jobs:
       - name: Run the tests
         run: ./gradlew test
 
-      - name: Run build in a subdirectory
-        run: ./gradlew build
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
 
-#      - name: Build with Gradle
-#        run: ./gradlew build --no-daemon
       - name: Get the JAR file name
         id: get-jar-name
         run: |
