@@ -46,7 +46,13 @@ jobs:
       - name: Get the JAR file name
         id: get-jar-name
         run: |
-          JAR_FILE=$(./gradlew -q printBootJarName)
-          echo "jar_file_name=$JAR_FILE" >> $GITHUB_OUTPUT
-    
+          JAR_FILE_NAME=$(./gradlew -q printBootJarName)
+          echo "jar_file_name=$JAR_FILE_NAME" >> $GITHUB_OUTPUT
+
+      - name: Get the JAR file path
+        id: get-jar-path
+        run: |
+          JAR_FILE_PATH=$(./gradlew -q printBootJarInfo | jq -r '.jarFileAbsolutePath')
+          echo $JAR_FILE_PATH
+          echo "jar_file_name=$JAR_FILE_PATH" >> $GITHUB_OUTPUT
       

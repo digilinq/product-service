@@ -1,3 +1,4 @@
+import groovy.json.JsonOutput
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
@@ -130,5 +131,17 @@ compileJava.dependsOn 'generateServiceCatalogApi'
 tasks.register('printBootJarName') {
     doLast {
         println tasks.bootJar.archiveFile.get().asFile.name
+    }
+}
+
+tasks.register('printBootJarInfo') {
+    dependsOn bootJar
+    doLast {
+        def bootJarTask = tasks.named('bootJar').get()
+        def info = [
+                jarFileName: bootJarTask.archiveFileName.get(),
+                jarFileAbsolutePath: bootJarTask.archiveFile.get().asFile.absolutePath
+        ]
+        println JsonOutput.toJson(info)
     }
 }
