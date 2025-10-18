@@ -58,9 +58,8 @@ jobs:
 
       - name: Copy JAR file and Dockerfile
         run: |
-          mkdir -p staging
-          cp ci/Dockerfile staging
-          cp build/libs/${{ steps.get-jar-name.outputs.jar_file_name }} staging
+          mkdir -p staging && cp $(find . -type f -path "*/build/*" -name $(./gradlew -q printBootJarName) ! -name "*plain*.jar") staging
+          cp ci/Dockerfile staging          
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
