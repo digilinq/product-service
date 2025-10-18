@@ -55,4 +55,38 @@ jobs:
           JAR_FILE_PATH=$(./gradlew -q printBootJarInfo | jq -r '.jarFileAbsolutePath')
           echo $JAR_FILE_PATH
           echo "jar_file_name=$JAR_FILE_PATH" >> $GITHUB_OUTPUT
-      
+
+      - name: Copy JAR file and Dockerfile
+        run: |
+          mkdir -p staging
+          cp ci/Dockerfile staging
+          cp build/libs/${{ steps.get-jar-name.outputs.jar_file_name }} staging
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: staging
+
+  publish:
+    name: Publish to Docker Hub
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      CONTAINER_REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
+      CONTAINER_REGISTRY_USERNAME: ${{ vars.DOCKER_HUB_USERNAME }}
+      CONTAINER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      NAMESPACE: ${{ vars.DOCKER_HUB_USERNAME }}
+      IMAGE_NAME: ${{ vars.DOCKER_HUB_REPOSITORY }}
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: package
+      - name: Login to container repository
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.CONTAINER_REGISTRY }}
+          username: ${{ env.CONTAINER_REGISTRY_USERNAME }}
+          password: ${{ env.CONTAINER_REGISTRY_PASSWORD }}
