@@ -1,6 +1,10 @@
 name: Build and Deploy to Dev Environment
 
 on:
+  push:
+    branches:
+      - 'main'
+      - 'master'
   pull_request:
     types: [ opened, synchronize, reopened ]
     branches: [ main, master ]
@@ -146,6 +150,7 @@ jobs:
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
       - name: Deploy to the Kubernetes cluster
         uses: azure/k8s-deploy@v5
+        if: github.event_name != 'pull_request'
         with:
           strategy: basic
           action: deploy
