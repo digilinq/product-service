@@ -113,6 +113,9 @@ jobs:
             type=ref,event=branch,suffix=-{{ sha }}
             type=ref,event=pr
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/') }}
+      - name: Print jar file name
+        run: |
+          echo "JAR file name: ${{ needs.build.outputs.jar_file_name }}"
       - name: Build and push Docker Image
         uses: docker/build-push-action@v6
         with:
@@ -159,4 +162,3 @@ jobs:
             manifests/ingress.yaml
           images: |
             ${{ needs.publish.outputs.docker-image }}
-
