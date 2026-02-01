@@ -131,7 +131,7 @@ jobs:
       - publish
     runs-on: ubuntu-latest
     env:
-      NAMESPACE: commerce
+      NAMESPACE: tst
       REPLICAS: 2
     steps:
       - name: Checkout code
