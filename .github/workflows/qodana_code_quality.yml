@@ -13,6 +13,9 @@ on:
 
 jobs:
   qodana:
+    concurrency:
+      group: qodana-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     permissions:
       contents: write
