@@ -124,6 +124,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             JAR_FILE=${{ needs.build.outputs.jar_file_name }}
+
   deploy:
     name: Deploy to Kubernetes
     needs:
@@ -131,7 +132,7 @@ jobs:
       - publish
     runs-on: ubuntu-latest
     env:
-      NAMESPACE: commerce
+      NAMESPACE: tst
       REPLICAS: 2
     steps:
       - name: Checkout code
